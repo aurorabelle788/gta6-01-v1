@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solmar Vice</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- HUD -->
+  <div id="hud" class="hidden">
+    <div id="objective"><span id="objective-title">SOLMAR VICE</span><span id="objective-text"></span></div>
+    <div id="top-right">
+      <canvas id="minimap" width="180" height="180"></canvas>
+      <div id="stars"></div>
+    </div>
+    <div id="bottom-left">
+      <div id="health-wrap"><div id="health-bar"></div><span id="health-text">100</span></div>
+      <div id="money">$<span id="money-value">0</span> <span id="debt">/ $2,800 debt</span></div>
+    </div>
+    <div id="speed" class="hidden"><span id="speed-value">0</span> mph</div>
+    <div id="hint">WASD move &middot; Mouse look &middot; SHIFT run &middot; SPACE jump/handbrake &middot; E enter/exit car &middot; F punch &middot; M mute &middot; P pause</div>
+    <div id="interact" class="hidden">Press <b>E</b> <span id="interact-text"></span></div>
+    <div id="toast" class="hidden"></div>
+    <div id="mission-banner" class="hidden"></div>
+  </div>
+
+  <!-- Start screen -->
+  <div id="start-screen">
+    <h1>SOLMAR<br>VICE</h1>
+    <p class="tagline">Sun. Sea. Sirens.</p>
+    <p class="story">Rico Vale owes <b>$2,800</b> to the wrong people in the coastal city of Solmar.
+      Three jobs. One driver. Pay it off — or don't come back.</p>
+    <div class="controls">
+      <div><b>WASD</b> move / drive</div><div><b>Mouse</b> look</div>
+      <div><b>SHIFT</b> run</div><div><b>SPACE</b> jump / handbrake</div>
+      <div><b>E</b> enter / exit car</div><div><b>F</b> punch</div>
+      <div><b>M</b> mute</div><div><b>P</b> pause</div>
+    </div>
+    <button id="start-btn">CLICK TO START</button>
+    <button id="continue-btn" class="hidden">CONTINUE</button>
+    <p class="fine">An original game. No real places, people, or brands.</p>
+  </div>
+
+  <!-- Pause screen -->
+  <div id="pause-screen" class="hidden">
+    <h2>PAUSED</h2>
+    <p>Take a breath, Rico.</p>
+    <button id="resume-btn">RESUME</button>
+    <button id="restart-btn">RESTART</button>
+  </div>
+
+  <!-- Ending screen -->
+  <div id="end-screen" class="hidden">
+    <h2>DEBT PAID</h2>
+    <p>Rico Vale is free. Solmar is his now — every street, every sunset, every siren fading behind him.</p>
+    <p class="end-stats">Missions complete: <span id="end-missions">3</span> &middot; Money earned: $<span id="end-money">2,800</span></p>
+    <button id="again-btn">PLAY AGAIN</button>
+  </div>
+</div>
+
+<script src="vendor/three.min.js"></script>
+<script>
+// Shared game state. Every system module reads and writes this object.
+window.G = {
+  mode: 'menu',            // menu | playing | paused | ended
+  time: 0,
+  seed: 1,
+  shotMode: null,          // null | cover | onfoot | chase | mission
+  keys: {},
+  mouseDX: 0, mouseDY: 0,
+  money: 0,
+  debt: 2800,
+  missionsDone: 0,
+  player: null,            // {pos, yaw, vy, onGround, health, inCar, speed}
+  cars: [],                // traffic + parked + police cars
+  peds: [],
+  cops: [],                // foot police
+  wanted: 0,
+  unseenTime: 0,           // seconds out of police line-of-sight
+  decayAccum: 0,
+  city: null,              // {buildings:[{minX,maxX,minZ,maxZ,h}], roads:[...], spawn}
+  mission: null,           // {index, phase, target, timer, ...}
+  camera: { yaw: 0, pitch: 0.32, dist: 9 },
+  muted: false,
+  audio: null,
+  minimap: null,
+  paused: false,
+};
+</script>
+<script src="js/save.js"></script>
+<script src="js/audio.js"></script>
+<script src="js/city.js"></script>
+<script src="js/player.js"></script>
+<script src="js/vehicles.js"></script>
+<script src="js/pedestrians.js"></script>
+<script src="js/police.js"></script>
+<script src="js/missions.js"></script>
+<script src="js/hud.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
